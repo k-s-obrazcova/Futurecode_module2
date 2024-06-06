@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Издательства</title>
+</head>
+<body>
+    <h1>Издательства</h1>
+    <a href="{% url 'create_publishing_house_page' %}">Добавить Издательство</a>
+    <div>
+        {% for publishing_house in list_publishing_house %}
+        <h1>{{ publishing_house.title }}</h1>
+        <div>
+            <p>
+                Телефон: {{ publishing_house.telephone }}
+            </p>
+            <p>
+                <a href="#">Подробнее...</a>
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+
+</body>
+</html>
