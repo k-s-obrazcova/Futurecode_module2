@@ -5,28 +5,28 @@
     <title>Книги</title>
 </head>
 <body>
-    <h1>Книги</h1>
+<h1>Книги</h1>
+<div>
+    {% for book in list_books %}
+    <h1>{{ book.name }}</h1>
     <div>
-        {% for book in list_books %}
-        <h1>{{ book.name }}</h1>
-        <div>
-            <p>
-                Количество страниц: {{ book.count_pages }}
-            </p>
-            <p>
-                Категории: {% for category in book.category_set.all %} {{ category.title }}. {% endfor %}
-            </p>
-            <p>
-                Цена: {{ book.price }} рублей
-            </p>
-            <p>
-                 <a href="{% url 'details_book_page' book.pk %}">Подробнее...</a>
-            </p>
-            __________________________________
-
-        </div>
-        {% endfor %}
+        <p>
+            Количество страниц: {{ book.count_pages }}
+        </p>
+        <p>
+            Категории: {% for category in book.category_set.all %}
+            {{ category.title }}
+            {% endfor %}
+        </p>
+        <p>
+            Цена: {{ book.price }} рублей.
+        </p>
+        <p>
+            <a href="{% url 'details_book_page' book.pk %}">Подробнее...</a>
+        </p>
+    _____________________________________________________________
     </div>
-
+{% endfor %}
+</div>
 </body>
 </html>
