@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Домашняя страница</title>
+</head>
+<body>
+    {% if messages %}
+        <h1>Оповещение</h1>
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif%}
+    <h1>Домашняя страница</h1>
+    <ul>
+        {% if request.user.is_anonymous %}
+        <li>
+            <a href="{% url 'log in' %}">Авторизация</a>
+        </li>
+        <li>
+            <a href="{% url 'regis' %}">Регистрация</a>
+        </li>
+        {% else %}
+        <li>
+            <a href="{% url 'log out' %}">Выйти из аккаунта</a>
+        </li>
+        {% endif %}
+        <li>
+            <a href="{% url 'anon' %}">Страница анонимного пользователя</a>
+        </li>
+        <li>
+            <a href="{% url 'auth' %}">Страница авторизованного пользователя</a>
+        </li>
+    </ul>
+<div>
+    {% if perms.library.add_publishing_house %}
+        <h2>Может добавить поставщика</h2>
+    {% endif %}
+    {% if perms.library.add_publishing_house and perms.library.change_publishing_house %}
+        <h2>Может добавлять и изменять поставщика</h2>
+    {% endif %}
+
+</div>
+</body>
+</html>

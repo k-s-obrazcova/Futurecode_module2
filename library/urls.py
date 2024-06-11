@@ -6,4 +6,12 @@ urlpatterns = [
     path('books/details/<int:id>/', book_details, name='details_book_page'),
     path('publishing_house/create/', publishing_house_create, name='create_publishing_house_page'),
 
+    path('registration/', user_registration, name='regis'),
+    path('login/', user_login, name='log in'),
+    path('logout/', user_logout, name='log out'),
+
+    path('anon/', anon, name='anon'),
+    path('auth/', auth, name='auth'),
+
+    path('index/', home, name='home_page'),
 ]
