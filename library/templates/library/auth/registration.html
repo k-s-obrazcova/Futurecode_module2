@@ -5,13 +5,14 @@
     <title>Регистрация</title>
 </head>
 <body>
-    <h1>Регистрация</h1>
-
+    <h1>Регистрация пользователей</h1>
     {% if messages %}
         <h1>Оповещение</h1>
         <ul class="messages">
             {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                {{ message }}
+                </li>
             {% endfor %}
         </ul>
     {% endif %}
@@ -19,11 +20,11 @@
     <div>
         <form method="post">
             {% csrf_token %}
-
             {{ form.as_div }}
             <input type="submit" value="Зарегистрироваться">
         </form>
-        <a href="{% url 'log in' %}">Назад</a>
+        <a href="#">Назад</a>
     </div>
+
 </body>
 </html>

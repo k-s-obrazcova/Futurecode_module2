@@ -1,7 +1,9 @@
-from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 
-from .forms import Publishing_houseForm
+from .forms import *
+from django.contrib.auth import login, logout
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required, permission_required
 from .models import *
 # Create your views here.
 
@@ -38,94 +40,49 @@ def publishing_house_create(request):
         }
         return render(request, 'library/publishing_house/create.html', context)
 
-
-from django.contrib.auth import login, logout
-from django.contrib.auth.decorators import login_required,permission_required
-
-from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
-from .forms import RegistrationForm, LoginForm
-
 def user_registration(request):
     if request.method == "POST":
         form = RegistrationForm(request.POST)
-        #form= UserCreationForm(request.POST)
-
         if form.is_valid():
             user = form.save()
             print(user)
 
-            login(request,user)
+            login(request, user)
 
-            messages.success(request, 'Вы успешно зарегистрировались')
+            messages.success(request, 'Вы успешно зарегистрированы')
 
-            return redirect('home_page')
-        messages.error(request, 'Что-то пошло не так')
+            return redirect('catalog_book_page')
+        messages.error(request, 'Данные введены не верно')
 
     else:
         form = RegistrationForm()
-        #form = UserCreationForm()
     return render(request, 'library/auth/registration.html', {'form': form})
-
 
 def user_login(request):
     if request.method == "POST":
         form = LoginForm(data=request.POST)
-        #form = AuthenticationForm(data=request.POST)
-
         if form.is_valid():
             user = form.get_user()
-
-            print('is_anon: ', request.user.is_anonymous)
-            print('is_auth: ', request.user.is_authenticated)
+            print('anonim', request.user.is_anonymous)
+            print('auth', request.user.is_authenticated)
 
             login(request, user)
 
-            print('is_anon: ', request.user.is_anonymous)
-            print('is_auth: ', request.user.is_authenticated)
+            print('anonim', request.user.is_anonymous)
+            print('auth', request.user.is_authenticated)
             print(user)
 
             messages.success(request, 'Вы успешно авторизовались')
-            return redirect('home_page')
-        messages.error(request, 'Что-то пошло не так')
-
+            return redirect('catalog_book_page')
+        messages.error(request, 'Что-то заполнено не верно')
     else:
         form = LoginForm()
-        return render(request,'library/auth/login.html', {'form': form})
+        return render(request, 'library/auth/login.html', {'form': form})
 
 def user_logout(request):
     logout(request)
     messages.warning(request, 'Вы вышли из аккаунта')
     return redirect('log in')
 
-def anon(request):
-    print('is_active: ', request.user.is_active)
-    print('is_staff: ', request.user.is_staff)
-    print('is_superuser: ', request.user.is_superuser)
-    print('is_anonymous: ', request.user.is_anonymous)
-    print('is_auth: ', request.user.is_authenticated)
-
-    print('Может ли добавлять поставщика?', request.user.has_perm('magazine.add_supplier'))
-    print('Может ли добавлять И изменять поставщика?', request.user.has_perms(['magazine.add_supplier', 'magazine.change_supplier']))
-    print('Может ли изменять адрес?', request.user.has_perm('magazine.change_address'))
-    return render(request, 'library/test/anon.html')
-
-@login_required()
-def auth(request):
-    return render(request, 'library/test/auth.html')
 
 
-@permission_required('magazine.add_supplier')
-def can_add_supplier(request):
-    return render(request, 'library/test/can_add_supplier.html')
-
-@permission_required(['magazine.add_supplier','magazine.change_supplier'])
-def can_change_add_supplier(request):
-    return render(request, 'library/test/can_change_add_supplier.html')
-
-@permission_required('magazine.change_address')
-def can_change_address(request):
-    return render(request, 'library/test/can_change_address.html')
-
-
-def home(request):
-    return render(request, 'library/index.html')

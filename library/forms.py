@@ -41,39 +41,39 @@ class Publishing_houseForm(forms.ModelForm):
         raise ValidationError('Телефон не соответствует шаблону +7(ХХХ)ХХХ-ХХ-ХХ')
 
 class RegistrationForm(UserCreationForm):
-    username = forms.CharField(
-        label='Логин пользователя',
-        widget= forms.TextInput(attrs={'class': 'form-control', }),
-        min_length=2
-    )
-    email = forms.CharField(
-        label='Электронная почта',
-        widget=forms.EmailInput(attrs={'class': 'form-control', })
-    )
-    password1 = forms.CharField(
-        label='Введите пароль',
-        widget=forms.PasswordInput(attrs={'class': 'form-control', })
-    )
-    password2 = forms.CharField(
-        label='Повторите пароль',
-        widget=forms.PasswordInput(attrs={'class': 'form-control', })
-    )
-
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2']
-
-
-
+        fields = (
+            'username',
+            'email',
+            'password1',
+            'password2',
+        )
+        username = forms.CharField(
+            label='Логин пользователя',
+            widget=forms.TextInput(attrs={'class': 'form-control',}),
+            min_length=2
+        )
+        email = forms.EmailField(
+            label='Электронная почта',
+            widget=forms.EmailInput(attrs={'class': 'form-control',})
+        )
+        password1 = forms.CharField(
+            label='Введите пароль',
+            widget=forms.PasswordInput(attrs={'class': 'form-control',})
+        )
+        password2 = forms.CharField(
+            label='Повторите пароль',
+            widget=forms.PasswordInput(attrs={'class': 'form-control',})
+        )
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(
-        label='Логин пользователя',
-        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        label='Логин',
+        widget=forms.TextInput(attrs={'class': 'form-control',}),
         min_length=2
     )
     password = forms.CharField(
-        label='Пароль пользователя',
-        widget=forms.PasswordInput(attrs={'class': 'form-control'})
-
+        label='Пароль',
+        widget=forms.PasswordInput(attrs={'class': 'form-control',})
     )

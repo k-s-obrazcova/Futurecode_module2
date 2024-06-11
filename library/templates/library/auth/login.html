@@ -6,25 +6,25 @@
 </head>
 <body>
     <h1>Авторизация</h1>
-
     {% if messages %}
         <h1>Оповещение</h1>
         <ul class="messages">
             {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                {{ message }}
+                </li>
             {% endfor %}
         </ul>
     {% endif %}
-<div>
-    <form method="post">
-        {% csrf_token %}
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_div }}
+            <input type="submit" value="Войти">
+        </form>
+        <a href="#">Зарегистрироваться</a>
+        <a href="{% url 'catalog_book_page' %}">Каталог</a>
+    </div>
 
-        {{ form.as_div }}
-        <input type="submit" value="Войти">
-
-    </form>
-    <a href="{% url 'regis' %}">Зарегистрироваться</a>
-    <a href="{% url 'home_page' %}">Назад</a>
-</div>
 </body>
 </html>

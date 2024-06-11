@@ -10,8 +10,4 @@ urlpatterns = [
     path('login/', user_login, name='log in'),
     path('logout/', user_logout, name='log out'),
 
-    path('anon/', anon, name='anon'),
-    path('auth/', auth, name='auth'),
-
-    path('index/', home, name='home_page'),
 ]
