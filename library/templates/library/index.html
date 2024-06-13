@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Домашняя страница</title>
+</head>
+<body>
+    <h1>Домашняя страница</h1>
+    {% if messages %}
+        <h1>Оповещение</h1>
+        <ul class="messages">
+            {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                {{ message }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <ul>
+        <li>
+            <a href="{% url 'create_publishing_house_page' %}">Создать издательство</a>
+        </li>
+        <li>
+            <a href="{% url 'catalog_book_page' %}">Каталог книг</a>
+        </li>
+        {% if request.user.is_anonymous %}
+            <li>
+                <a href="{% url 'log in' %}">Авторизация</a>
+            </li>
+            <li>
+                <a href="{% url 'regis' %}">Регистрация</a>
+            </li>
+        {% else %}
+            <li>
+                <a href="{% url 'log out' %}">Выйти из профиля</a>
+            </li>
+        {% endif %}
+        <li>
+            <a href="{% url 'anonim' %}">Страница доступная всем</a>
+        </li>
+        <li>
+            <a href="{% url 'auth' %}">Доступ только авторизованным</a>
+        </li>
+        <li>
+            <a href="{% url 'add_house' %}">Добавление издательства</a>
+        </li>
+        <li>
+            <a href="{% url 'add_change_house' %}">Добавление и изменение издательства</a>
+        </li>
+    </ul>
+</body>
+</html>

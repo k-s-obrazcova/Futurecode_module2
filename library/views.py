@@ -21,6 +21,7 @@ def book_details(request, id):
     }
     return render(request, 'library/books/details.html', context)
 
+@permission_required('library.add_publishing_house')
 def publishing_house_create(request):
     if request.method == "POST":
         form_publishing_house = Publishing_houseForm(request.POST)
@@ -84,5 +85,34 @@ def user_logout(request):
     messages.warning(request, 'Вы вышли из аккаунта')
     return redirect('log in')
 
+def home_page(request):
+    return render(request, 'library/index.html')
+
+def anonim(request):
+    print('is_active:',request.user.is_active)
+    print('is_staff:', request.user.is_staff)
+    print('is_superuser:', request.user.is_superuser)
+    print('anonim', request.user.is_anonymous)
+    print('auth', request.user.is_authenticated)
+
+    print('Может ли добавлять издательство?', request.user.has_perm('library.add_publishing_house'))
+    print('Может ли добавлять и изменять издательство?', request.user.has_perms(['library.add_publishing_house',
+                                                                                 'library.change_publishing_house']))
+    return render(request, 'library/test/anonim.html')
 
 
+@login_required()
+def auth(request):
+    return render(request, 'library/test/auth.html')
+
+@permission_required('library.add_publishing_house')
+def add_house(request):
+    return render(request, 'library/test/add.html')
+
+@permission_required(['library.add_publishing_house', 'library.change_publishing_house'])
+def add_change_house(request):
+    return render(request, 'library/test/add_change.html')
+
+@permission_required('library.change_only_telephone')
+def change_only_telephone_house(request):
+    return render(request, 'library/test/telephone.html')

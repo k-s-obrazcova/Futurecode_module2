@@ -37,6 +37,10 @@ class Publishing_house(models.Model):
         verbose_name = 'Издательство'
         verbose_name_plural = 'Издательства'
 
+        permissions = [
+            ('change_only_telephone', 'Можно изменять только телефон')
+        ]
+
 
 class Category(models.Model):
     title = models.CharField(max_length=100, verbose_name='Название')

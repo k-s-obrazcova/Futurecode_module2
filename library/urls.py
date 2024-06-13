@@ -10,4 +10,11 @@ urlpatterns = [
     path('login/', user_login, name='log in'),
     path('logout/', user_logout, name='log out'),
 
+    path('index/', home_page, name='home'),
+    path('anonim/', anonim, name='anonim'),
+    path('auth/', auth, name='auth'),
+    path('add_change_publishing_house/',add_change_house, name='add_change_house'),
+    path('add_publishing_house/', add_house, name='add_house'),
+    path('change_only_telephone/', change_only_telephone_house, name='change_only_telephone'),
+
 ]
