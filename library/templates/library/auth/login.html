@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Авторизация</title>
+</head>
+<body>
+    <h1>Авторизация</h1>
+    {% if messages %}
+    <h1>Оповещение</h1>
+    <ul class="messages">
+        {% for message in messages %}
+            <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+                {{ message }}
+            </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_div }}
+            <input type="submit" value="Войти">
+        </form>
+        <a href="{% url 'regis' %}">Зарегистрироваться</a>
+        <a href="{% url 'catalog_book_page' %}">Назад к каталогу</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ book_object.name }}</title>
+</head>
+<body>
+    <h1>Название книги: {{ book_object.name }}</h1>
+_____________________________________________________________________________
+    <p>
+        Описание: {{ book_object.description }}
+    </p>
+    <p>
+        Количество страниц: {{ book_object.count_pages }}
+    </p>
+    <p>
+        Категория: {% for category in book_object.category_set.all %}
+                    {{ category.title }}
+                    {% endfor %}
+    </p>
+    <p>
+        Цена:{{ book_object.price }} рублей.
+    </p>
+    <p>
+        Дата издания: {{ book_object.release_date }}
+    </p>
+    <p>
+        Дата написания: {{ book_object.create_date }}
+    </p>
+</body>
+</html>
