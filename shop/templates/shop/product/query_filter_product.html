@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Список товаров</title>
+</head>
+<body>
+    {% for product in find_product %}
+        <h1>Название продукта: {{ product.name }}</h1>
+            <p>{{ product.description }}</p>
+    {% endfor %}
+
+
+</body>
+</html>
