@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Фильтр на товары</title>
+    <link rel="stylesheet" href="{% static 'shop/css/bootstrap.css'%}">
+</head>
+<body>
+    <form>
+        {{ form.as_div }}
+        <button type="submit" class="btn btn-info">Применить фильтр</button>
+    </form>
+    {% for product in list_product %}
+        __________________________________________
+        <h1>Название продукта: {{ product.name }}</h1>
+        <p>Цена: {{ product.price }} руб.</p>
+        __________________________________________
+    {% endfor %}
+
+</body>
+</html>

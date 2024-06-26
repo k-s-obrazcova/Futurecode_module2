@@ -101,7 +101,7 @@ class Product(models.Model):
     is_exists = models.BooleanField(default=True, verbose_name='Логическое удаление')
 
     category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name='Категория')
-    tag = models.ManyToManyField(Tag, blank=True, null=True, verbose_name='Тег')
+    tag = models.ManyToManyField(Tag, blank=True, verbose_name='Тег')
     warehouse = models.ManyToManyField('Warehouse', through='Inventory', verbose_name='Склад')
 
     parametr = models.ManyToManyField(Parametr, through='Pos_parametr', verbose_name='Характеристики')
