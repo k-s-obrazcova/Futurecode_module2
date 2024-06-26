@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Страница подробной информации о {{ product.name }}</title>
+    <link rel="stylesheet" href="{% static 'shop/css/bootstrap.css' %}">
+
+</head>
+<body>
+    <h1 style="display: flex; justify-content: center; color: #842029">{{ product.name }}</h1>
+    ____________________________________________________________
+    <p>
+        {{ product.description }}
+    </p>
+    <p>
+        {{ product.price }} руб.
+    </p>
+    <p>
+        {{ product.date_create }}
+    </p>
+    <div style="display: flex; justify-content: center">
+                {% if product.photo %}
+                    <img src="{{ product.photo.url }}" class="card-img-top" style="max-width: 500px; max-height: 500px;" alt="...">
+                {% else %}
+                    <img src="{% static 'shop/image/no_photo.jpg'%}" class="card-img-top" alt="...">
+                {% endif %}
+    </div>
+</body>
+</html>

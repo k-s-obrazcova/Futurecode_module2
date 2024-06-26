@@ -1,6 +1,6 @@
 from types import NoneType
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from .forms import ProductFilterForm
 from .models import *
@@ -33,6 +33,15 @@ def product_list_with_filter(request):
             'form': product_form
         }
         return render(request, 'shop/product/catalog_filter.html', context)
+
+
+def get_one_product(request, id):
+    product = get_object_or_404(Product, pk=id)
+    context = {
+        'product': product
+    }
+    return render(request, 'shop/product/one_product.html', context)
+
 
 def get_one_filter_product(request):
     find_product = Product.objects.filter(is_exists=request.GET.get('is_ex'))

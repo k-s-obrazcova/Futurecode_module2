@@ -4,19 +4,72 @@
 <head>
     <meta charset="UTF-8">
     <title>Фильтр на товары</title>
-    <link rel="stylesheet" href="{% static 'shop/css/bootstrap.css'%}">
+    <link rel="stylesheet" href="{% static 'shop/css/bootstrap.css' %}">
+    <style>
+        .card-img-top {
+            width: 100%;
+            height: 25vw;
+            object-fit: cover;
+        }
+    </style>
 </head>
 <body>
-    <form>
-        {{ form.as_div }}
-        <button type="submit" class="btn btn-info">Применить фильтр</button>
-    </form>
-    {% for product in list_product %}
-        __________________________________________
-        <h1>Название продукта: {{ product.name }}</h1>
-        <p>Цена: {{ product.price }} руб.</p>
-        __________________________________________
-    {% endfor %}
+    <div class="container">
+        <div class="container">
+            <div class="row">
+                <div class="col-8">
+                    <ul>
+                        {% if request.user.is_anonymous %}
+                            <li><a class="btn btn-outline-primary" href="{% url 'log in' %}">Авторизация</a></li>
+                            <li><a style="margin-top: 20px;" class="btn btn-outline-info" href="{% url 'regis' %}">Регистрация</a></li>
+                        {% else %}
+                            <li><a class="btn btn-outline-danger" href="{% url 'log out' %}">Выход из профиля</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="col-4">
+                    Здравствуйте, {{ user }}
+                </div>
+            </div>
+        </div>
 
+        <form>
+            {{ form.as_div }}
+            <button style="margin-top: 20px;" type="submit" class="btn btn-info">Применить фильтр</button>
+        </form>
+        <h1 style="display: flex; justify-content: center; color: #6f42c1">Каталог платьев</h1>
+        <div class="container">
+            <div class="row">
+                {% for product in list_product %}
+                    <div class="col-4">
+                        <div class="card" style="width: 18rem;">
+                            {% if product.photo %}
+                                <img src="{{ product.photo.url }}" class="card-img-top" alt="...">
+                            {% else %}
+                                <img src="{% static 'shop/image/no_photo.jpg'%}" class="card-img-top" alt="...">
+                            {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <h6 class="card-subtitle mb-2 text-body-secondary">
+                                Категория: {{ product.category.name }}
+                            </h6>
+                            <p class="card-text">
+                                {{ product.description }}
+                            </p>
+                            <p class="card-text">
+                                Цена: {{ product.price }} руб.
+                            </p>
+                            {% if request.user.is_authenticated %}
+                                <a href="{% url 'get_one_product' product.pk %}" class="btn btn-outline-info">Подробнее ...</a>
+                            {% endif %}
+                        </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+
+    </div>
 </body>
 </html>
