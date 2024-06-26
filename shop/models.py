@@ -33,6 +33,7 @@ class Supply(models.Model):
         verbose_name = 'Поставка'
         verbose_name_plural = 'Поставки'
 
+
 class Parametr(models.Model):
     name = models.CharField(max_length=MAX_LENGTH_CHAR, unique=True, verbose_name='Название')
 
@@ -105,6 +106,7 @@ class Product(models.Model):
     photo = models.ImageField(upload_to='image/%Y/%m/%d', null=True, blank=True, verbose_name='Фотография товара')
     is_exists = models.BooleanField(default=True, verbose_name='Логическое удаление')
 
+    warehouse = models.ManyToManyField('Warehouse', through='Inventory', verbose_name='Склад')
     parametr = models.ManyToManyField(Parametr, through='Pos_parametr', verbose_name='Характеристики товара')
     category = models.ForeignKey(Category,on_delete=models.PROTECT, verbose_name='Категория')
     tag = models.ManyToManyField(Tag, blank=True, verbose_name='Тег')
@@ -157,25 +159,26 @@ class Pos_supply(models.Model):
         verbose_name_plural = 'Позиции поставок'
 
 
-
-class Manufacturer(models.Model):
-    name = models.CharField(max_length=MAX_LENGTH_CHAR, unique=True, verbose_name='Производитель')
-    country = models.CharField(max_length=MAX_LENGTH_CHAR, verbose_name='Страна')
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = 'Производитель'
-        verbose_name_plural = 'Производители'
-
-
 class Warehouse(models.Model):
-    location = models.CharField(max_length=MAX_LENGTH_CHAR, verbose_name='Местоположение')
-    capacity = models.PositiveIntegerField(verbose_name='Вместимость')
+    AIRPLANE = "AR"
+    TRAIN = "TR"
+    TRUCK = "TC"
+    ALL = "AL"
+    TYPE_POST = [
+        (AIRPLANE, 'Отправка самолетом'),
+        (TRAIN, 'Отправка поездом'),
+        (TRUCK, 'Отправка грузовиком'),
+        (ALL, 'Любой вид отправки'),
+    ]
+    owner_lastname = models.CharField(max_length=MAX_LENGTH_CHAR, verbose_name='Фамилия владельца')
+    owner_name = models.CharField(max_length=MAX_LENGTH_CHAR, verbose_name='Имя владельца')
+    owner_surname = models.CharField(max_length=MAX_LENGTH_CHAR, blank=True, null=True, name='Отчество владельца')
+    location = models.CharField(max_length=MAX_LENGTH_CHAR, verbose_name='Расположение')
+    type_post = models.CharField(max_length=2, choices=TYPE_POST, default=ALL, verbose_name='Способ отправки')
+    capacity = models.PositiveIntegerField(default=10000, verbose_name='Вместимость')
 
     def __str__(self):
-        return self.location
+        return f'{self.location} ({self.capacity} ячеек)'
 
     class Meta:
         verbose_name = 'Склад'
@@ -183,71 +186,31 @@ class Warehouse(models.Model):
 
 
 class Inventory(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.PROTECT, verbose_name='Товар')
-    warehouse = models.ForeignKey(Warehouse, on_delete=models.PROTECT, verbose_name='Склад')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Товар')
+    warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE, verbose_name='Склад')
     quantity = models.PositiveIntegerField(verbose_name='Количество')
+    single_position = models.FloatField(verbose_name='Вес одной позиции')
 
     def __str__(self):
-        return f'{self.product.name} - {self.warehouse.location}'
+        return f'{self.product.name} хранится в #{self.warehouse.pk} ({self.quantity})'
 
     class Meta:
-        verbose_name = 'Инвентарь'
-        verbose_name_plural = 'Инвентарь'
-
+        verbose_name = 'Хранение позиции'
+        verbose_name_plural = 'Хранение позиций'
 
 class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Товар')
-    user_name = models.CharField(max_length=MAX_LENGTH_CHAR, verbose_name='Имя пользователя')
-    rating = models.PositiveIntegerField(verbose_name='Рейтинг')
-    comment = models.TextField(verbose_name='Комментарий')
+    user_name = models.CharField(default='anonim', max_length=MAX_LENGTH_CHAR, verbose_name='Никнейм пользователя')
+    rating = models.PositiveIntegerField(verbose_name='Оценка')
+    comment = models.TextField(null=True, blank=True, verbose_name='Комментарий')
+    photo = models.ImageField(upload_to='image/review/%Y/%m/%d', null=True, blank=True, verbose_name='Фото в отзыве')
 
     def __str__(self):
-        return f'{self.user_name} - {self.product.name}'
+        return f'{self.user_name} - {self.product.name} ({self.rating})'
 
     class Meta:
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
-
-
-class Discount(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Товар')
-    percentage = models.PositiveIntegerField(verbose_name='Процент скидки')
-    start_date = models.DateField(verbose_name='Дата начала')
-    end_date = models.DateField(verbose_name='Дата окончания')
-
-    def __str__(self):
-        return f'{self.product.name} - {self.percentage}%'
-
-    class Meta:
-        verbose_name = 'Скидка'
-        verbose_name_plural = 'Скидки'
-
-
-class Shipment(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, verbose_name='Заказ')
-    date_shipped = models.DateTimeField(verbose_name='Дата отправки')
-    tracking_number = models.CharField(max_length=MAX_LENGTH_CHAR, verbose_name='Номер отслеживания')
-
-    def __str__(self):
-        return f'{self.order.pk} - {self.tracking_number}'
-
-    class Meta:
-        verbose_name = 'Отправка'
-        verbose_name_plural = 'Отправки'
-
-
-class Return(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, verbose_name='Заказ')
-    reason = models.TextField(verbose_name='Причина возврата')
-    date_returned = models.DateTimeField(verbose_name='Дата возврата')
-
-    def __str__(self):
-        return f'{self.order.pk} - {self.date_returned}'
-
-    class Meta:
-        verbose_name = 'Возврат'
-        verbose_name_plural = 'Возвраты'
-
 
 
 

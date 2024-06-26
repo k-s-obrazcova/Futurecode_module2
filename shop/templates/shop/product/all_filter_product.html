@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Фильтр товаров</title>
+    <link rel="stylesheet" href="{% static 'shop/css/bootstrap.css'%}">
+    <style>
+        .card-img-top {
+            width: 100%;  /* Ширина изображения будет равна ширине родительского элемента */
+            height: 15vw; /* Высота изображения будет равна 15% от ширины окна просмотра */
+            object-fit: cover;  /* Изображение будет обрезано, чтобы заполнить контейнер */
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
+                <ul>
+                    {% if request.user.is_anonymous %}
+                        <li><a class="btn btn-primary" href="{% url 'log in' %}">Авторизация</a></li>
+                        <li><a class="btn btn-primary" href="{% url 'regis' %}">Регистрация</a></li>
+                    {% else %}
+                        <li><a class="btn btn-primary" href="{% url 'log out' %}">Выход из аккаунта</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="col-4">
+                Здравствуйте, {{ user }}
+            </div>
+        </div>
+
+    </div>
+
+    <form>
+        {{ form.as_div }}
+        <button type="submit" class="btn btn-info">Применить фильтр</button>
+    </form>
+    <h1 style="display: flex; justify-content: center">Каталог платьев</h1>
+    <div class="container">
+        <div class="row">
+            {% for object in list_product %}
+                <div class="col-4">
+                    <div class="card" style="width: 18rem;">
+                        {% if object.photo %}
+                            <img src="{{ object.photo.url }}" class="card-img-top" alt="...">
+                        {% else %}
+                            <img src="{% static 'library/image/no_photo.jpg' %}" class="card-img-top" alt="...">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ object.name }}</h5>
+                            <h6 class="card-subtitle mb-2 text-body-secondary">
+                                Категория: {{ object.category.name }}</h6>
+                            <h6 class="card-subtitle mb-2 text-body-secondary">
+                                Теги: {% for tag in object.tag.all %} {{ tag.name }}. {% endfor %}
+                            </h6>
+                            <p class="card-text">{{ object.description }}</p>
+                            <p class="card-text">Цена: {{ object.price }}</p>
+                            {% if request.user.is_authenticated %}
+                                <a href="{% url 'get_one_product' object.pk %}"
+                                   class="btn btn-primary">Подробнее</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+</body>
+</html>

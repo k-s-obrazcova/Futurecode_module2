@@ -163,6 +163,7 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'Поставки',
             },
         ),
+
         migrations.AddField(
             model_name='pos_supply',
             name='supply',
