@@ -1,15 +1,23 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Информация о {{ product.name }}</title>
+    <link rel="stylesheet" href="{% static 'shop/css/bootstrap.css' %}">
 </head>
 <body>
-    <h1>{{ product.name }}</h1>
+    <h1 style="justify-content: center; display: flex; color: #ffda38">{{ product.name }}</h1>
     __________________________________
     <p>{{ product.description }}</p>
     <p>{{ product.price }} руб.</p>
     <p>{{ product.create_date }}</p>
-
+    <div style="display: flex; justify-content: center;">
+    {% if product.photo %}
+        <img src="{{ product.photo.url }}" class="card-img-top" alt="..." style="max-height: 400px; max-width: 400px;">
+    {% else %}
+        <img src="{% static 'shop/image/no_photo.jpg'%}" class="card-img-top" alt="..." style="max-height: 400px; max-width: 400px;">
+    {% endif %}
+    </div>
 </body>
 </html>

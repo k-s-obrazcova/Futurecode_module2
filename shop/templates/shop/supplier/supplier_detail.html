@@ -1,0 +1,16 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Подробнее о {{ object.name }}</title>
+    <link rel="stylesheet" href="{% static 'shop/css/bootstrap.css' %}">
+</head>
+<body>
+    <a href="{% url 'supplier_list' %}" class="btn btn-outline-primary">Обратно к списку поставщиков</a>
+
+    <h1>{{ object.name }}</h1>
+    <p>{{ object.address }}</p>
+
+</body>
+</html>

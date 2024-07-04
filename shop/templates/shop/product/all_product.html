@@ -1,16 +1,44 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Все товары</title>
+    <link rel="stylesheet" href="{% static 'shop/css/bootstrap.css' %}">
 </head>
 <body>
-        {% for product in list_product %}
-        ______________________________________________
-        <h1>Название продукта: {{ product.name }}</h1>
-        <p>Цена:{{ product.price }} руб.</p>
-        ______________________________________________
+<table class="table">
+    <tbody class="table-primary">
+    {% for product in list_product %}
+        <tr>
+            <td>
+                <div class="row">
+                    <div class="col col-3">
+                        {{ product.name }} - {{ product.price }}
+                    </div>
+                    <div class="col col-3">
+                        {{ product.description }}
+                    </div>
+                    <div class="col col-6">
+                        Заказы:
+                        {% for ord in product.pos_order_set.all %}
+                            <ul>
+                                <li>
+                                    #{{ ord.order.pk }} {{ ord.order.date_create }} - {{ ord.order.buyer_lastname }}
+                                    ({{ ord.count }} шт.)
+                                </li>
+                            </ul>
+                        {% empty %}
+                            <p>
+                                Никто еще не совершил заказы
+                            </p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </td>
+        </tr>
     {% endfor %}
-
+    </tbody>
+</table>
 </body>
 </html>

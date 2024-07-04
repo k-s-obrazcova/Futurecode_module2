@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ action }} поставщика</title>
+    <link rel="stylesheet" href="{% static 'shop/css/bootstrap.css' %}">
+
+</head>
+<body>
+<div class="container">
+    <h1>{{ action }} поставщика</h1>
+
+
+    <form method="post">
+        {#        Не забываем добавлять csrf_token, он нужен для передачи данных через POST #}
+        {% csrf_token %}
+        {{ form.as_div }}
+        <button type="submit" class="btn btn-primary">{{ action }} поставщика</button>
+    </form>
+    <a href="{% url 'product_list_filter' %}" class="btn btn-info">Обратно к списку товаров</a>
+</div>
+</body>
+</html>
