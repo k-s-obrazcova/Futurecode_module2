@@ -1,94 +1,10 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Список поставщиков</title>
-
-    <link rel="stylesheet" href="{% static 'shop/css/bootstrap.css' %}">
+    <title>Title</title>
 </head>
 <body>
-<a href="{% url 'supplier_create' %}" class="btn btn-outline-success">Добавить поставщика</a>
-<div class="row">
-    {% for object in object_list %}
-        <div class="col-4">
-        <div class="card" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">{{ object.name }}</h5>
-                <div class="card-body">
-                    <a href="{% url 'supplier_detail' object.pk %}" class="btn btn-outline-dark">Подробнее</a>
-                    <a href="{% url 'supplier_update' object.pk %}" class="btn btn-outline-secondary">Изменить</a>
-                    <a href="{% url 'supplier_delete' object.pk %}" class="btn btn-outline-danger">Удалить (с
-                        подтверждением)</a>
-                    <form action="{% url 'supplier_delete' object.pk %}" method="post">
-                        {% csrf_token %}
-                        <button class="btn btn-outline-danger">Удалить (сразу)</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-        </div>
-    {% endfor %}
-</div>
-<div class="container" style="justify-content: center; display: flex;">
-{# Проверяем сначала пагинируется ли наша страница (есть ли вообще пагинатор на нашей странице) #}
-    {% if is_paginated %}
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                {# Сначала проверяем, есть ли у нас предыдущая страница, #}
-                {# в ином случае, если попытаемся получить номер, которого не существует получим крит. ошибку #}
-                {% if page_obj.has_previous %}
-                    <li class="page-item">
-                        {# Подставляем номер предыдущей страницы в параметр page #}
-                        {# Т.к. через параметр page и идет открытие той или иной страницы #}
-                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                {% endif %}
 
-                {# Перебор всех возможных страниц #}
-                {% for p in paginator.page_range %}
-                    {# Если при переборе страниц, номер совпадает с текущей страницей, то выводим #}
-                    {# Также уберем из a ссылку чтобы не было возможности открывать одну и ту же страницу #}
-                    {% if p == page_obj.number %}
-                        <li class="page-item"><a class="page-link active">{{ p }}</a></li>
-
-                        {# Добавим также некоторые диапазон открытых страниц, чтобы не показывать все доступные страницы #}
-                        {# Если у нас будет 50 страниц выводимых в пагинации это будет странно выглядеть #}
-                        {# Но если будем выводить 1 предыдущую и 2 последующих будет лучше #}
-                    {% elif p >= page_obj.number|add:"-1" and p <= page_obj.number|add:"2" %}
-                        <li class="page-item"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
-                    {% else %}
-
-                        {# Также можно добавить первую и последнюю страницу #}
-                        {# Если иного не выводится то добавим первую (она всегда начинается с 1) #}
-                        {% if p == 1 %}
-                            <li class="page-item"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
-                            <li class="page-item"><p class="page-link">...</p></li>
-
-                            {# И последнюю, она всегда совпадает с кол-во страниц #}
-                        {% elif p == paginator.num_pages %}
-                            <li class="page-item"><p class="page-link">...</p></li>
-                            <li class="page-item"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
-                        {% endif %}
-                    {% endif %}
-
-                {% endfor %}
-
-
-                {# Все то же самое что и с "предыдущей страницей" #}
-                {% if page_obj.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
-    {% endif %}
-</div>
 </body>
 </html>
-
